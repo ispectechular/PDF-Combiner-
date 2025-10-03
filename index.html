@@ -9,61 +9,63 @@
 <style>
   :root{
     --slate:#4A7A92; --teal:#5A94B1; --green:#879B8D; --purple:#756A85; --lilac:#8E869F;
-    --light:#C2D6E1; --sage:#A0B4A7; --soft:#D3DDD7; --pale:#C4BFD0;
-    /* Layout vars that adapt on resize */
-    --outer-pad: 8px;              /* small margin for Start.me */
-    --card-pad: 20px;              /* will scale via ResizeObserver */
-    --gap: 12px;
-    --radius: 16px;
-    --title-size: clamp(1.25rem, 2.5vw, 2rem);
-    --hint-size: clamp(1rem, 2vw, 1.2rem);
-    --label-size: clamp(0.95rem, 1.8vw, 1.05rem);
+    --soft:#D3DDD7; --pale:#C4BFD0;
+    --outer-pad: 24px;
+    --card-pad: 28px;
+    --gap: 14px;
+    --radius: 20px;
+    --title-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    --hint-size: clamp(1rem, 2vw, 1.25rem);
+    --label-size: clamp(1rem, 1.6vw, 1.1rem);
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
+  html,body{height:100%;}
   body{
     margin:0; font-family:"Lexend",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-    background:transparent; padding:var(--outer-pad);
-    display:block; /* let it flow in any container */
+    min-height:100svh; display:flex; align-items:center; justify-content:center;
+    background:#ffffff;
+    padding:var(--outer-pad);
+    overflow:auto;
   }
-  .wrap{width:100%; height:100%;}
+  .wrap{position:relative; z-index:1; width:100%; max-width:760px}
   .card{
-    width:100%; max-width:100%; background:rgba(255,255,255,0.7); backdrop-filter:blur(10px);
-    border-radius:var(--radius); box-shadow:0 10px 20px rgba(0,0,0,0.1); padding:var(--card-pad);
-    display:flex; flex-direction:column; gap:var(--gap);
+    width:100%; background:#fff; border:1px solid var(--soft);
+    border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    padding:var(--card-pad); display:flex; flex-direction:column; gap:var(--gap);
   }
-  .title{font-size:var(--title-size); font-weight:700; color:var(--slate); text-align:center}
-  .hint{font-size:var(--hint-size); color:var(--green); text-align:center}
-  .label{font-size:var(--label-size); color:var(--slate); font-weight:500; margin-top:4px}
+  .title{font-size:var(--title-size); font-weight:700; color:#222; text-align:center}
+  .hint{font-size:var(--hint-size); color:#555; text-align:center}
+  .label{font-size:var(--label-size); color:#333; font-weight:500; margin-top:4px}
   input[type="text"]{
-    width:100%; padding:12px 14px; border:1px solid var(--soft); border-radius:12px; font-size:1rem; outline:none;
-    background:#fff;
+    width:100%; padding:12px 14px; border:1px solid var(--soft); border-radius:12px; font-size:1rem; outline:none; background:#fff;
   }
-  .drop{ border:2px dashed var(--teal); border-radius:16px; padding:16px; text-align:center; transition:0.2s ease; background:rgba(194,214,225,0.25); }
-  .drop.drag{ background:rgba(194,214,225,0.5) }
+  .drop{ border:2px dashed var(--teal); border-radius:16px; padding:16px; text-align:center; transition:0.2s ease; background:#fafafa; }
+  .drop.drag{ background:#f0f8fb }
   .files{ max-height:40vh; overflow:auto; margin-top:6px; padding-right:6px; }
-  .file{ display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:12px; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.06); margin-top:8px; font-size:0.95rem; }
+  .file{ display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:12px; background:#fff; border:1px solid #eee; margin-top:8px; font-size:0.95rem; }
   .file small{ margin-left:auto; color:#667 }
   .row{ display:flex; gap:10px; align-items:center }
-  .btn{ appearance:none; border:0; border-radius:16px; padding:12px 16px; font-weight:700; cursor:pointer; background:var(--purple); color:#fff; width:100%; transition:transform .05s ease; box-shadow:0 8px 16px rgba(117,106,133,.2); }
+  .controls{ display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap }
+  .btn{ appearance:none; border:0; border-radius:12px; padding:12px 16px; font-weight:700; cursor:pointer; background:var(--purple); color:#fff; transition:transform .05s ease; box-shadow:0 4px 10px rgba(0,0,0,.1); }
   .btn:active{ transform:translateY(1px) }
   .btn.secondary{ background:var(--slate) }
-  .iconbtn{ border:0; background:var(--pale); color:#342c3e; border-radius:10px; padding:6px 8px; cursor:pointer }
+  .iconbtn{ border:0; background:var(--pale); color:#342c3e; border-radius:8px; padding:6px 8px; cursor:pointer }
   .subtle{ font-size:.9rem; color:#555; text-align:center }
-  .pill{ font-size:.8rem; background:var(--pale); color:#342c3e; padding:2px 8px; border-radius:999px }
-  .footer{ display:flex; gap:10px }
+  .pill{ font-size:.8rem; background:#f2f2f2; color:#333; padding:2px 8px; border-radius:999px }
+  .footer{ display:flex; gap:10px; flex-wrap:wrap; justify-content:space-between; align-items:center }
+  .switch{ display:inline-flex; align-items:center; gap:8px; font-size:.95rem; color:#333 }
 
-  /* Compact tweaks when the container is very small */
-  .compact .card{ padding:16px }
-  .compact .btn{ padding:10px 12px }
-  .compact .file{ padding:6px 8px }
+  @media (max-width:420px){
+    :root{ --card-pad: 18px; --gap: 10px; }
+    .files{ max-height: 35vh }
+  }
 </style>
 </head>
 <body>
   <div class="wrap" role="region" aria-label="Transition Assessments PDF Combiner">
     <div class="card">
       <div class="title">Combine PDFs</div>
-      <div class="hint">Transition Assessments packet</div>
+      <div class="hint">Build a single Transition Assessments packet</div>
 
       <label class="label" for="studentName">Student name</label>
       <input id="studentName" type="text" placeholder="e.g., Michael Smith" aria-label="Student name" />
@@ -78,8 +80,13 @@
       <div id="files" class="files" aria-live="polite"></div>
 
       <div class="footer">
-        <button id="clearBtn" class="btn secondary" title="Clear list">Clear</button>
-        <button id="mergeBtn" class="btn" title="Merge PDFs">Merge PDFs</button>
+        <div class="controls">
+          <button id="clearBtn" class="btn secondary" title="Clear list">Clear</button>
+          <button id="mergeBtn" class="btn" title="Merge PDFs">Merge PDFs</button>
+        </div>
+        <label class="switch" title="Open merged file in a new tab">
+          <input id="openInNewTab" type="checkbox" checked> Open in new tab (safer)
+        </label>
       </div>
 
       <div class="subtle">Output name: <span id="previewName" class="pill">Transition Assessments - (Student Name) - (Current Year).pdf</span></div>
@@ -91,198 +98,102 @@
   const fileInput = document.getElementById('fileInput');
   const filesList = document.getElementById('files');
   const mergeBtn = document.getElementById('mergeBtn');
-  const toast = document.createElement('div');
-  toast.setAttribute('role','status');
-  toast.style.position='fixed';
-  toast.style.left='50%'; toast.style.bottom='16px'; toast.style.transform='translateX(-50%)';
-  toast.style.padding='10px 14px'; toast.style.borderRadius='12px'; toast.style.background='rgba(0,0,0,.8)'; toast.style.color='#fff'; toast.style.fontSize='0.95rem'; toast.style.boxShadow='0 6px 12px rgba(0,0,0,.2)';
-  toast.style.display='none';
-  document.body.appendChild(toast);
-
-  function showToast(msg, ms=3000){
-    toast.textContent = msg; toast.style.display='block';
-    clearTimeout(showToast._t); showToast._t = setTimeout(()=> toast.style.display='none', ms);
-  }
   const clearBtn = document.getElementById('clearBtn');
   const drop = document.getElementById('drop');
   const studentNameEl = document.getElementById('studentName');
   const previewName = document.getElementById('previewName');
-  const wrap = document.querySelector('.wrap');
+  const openInNewTabEl = document.getElementById('openInNewTab');
 
-  // --- Responsive/resizable behavior ---
-  // Adjust padding/compact mode based on container width
-  const ro = new ResizeObserver(entries => {
-    for (const entry of entries) {
-      const w = entry.contentRect.width;
-      document.documentElement.style.setProperty('--card-pad', w < 360 ? '16px' : w < 500 ? '20px' : '24px');
-      document.documentElement.style.setProperty('--gap', w < 360 ? '10px' : '12px');
-      wrap.classList.toggle('compact', w < 360);
-    }
-  });
-  ro.observe(wrap);
-
-  // Allow URL param to override outer pad (e.g., ?pad=6)
   const usp = new URLSearchParams(location.search);
-  const padParam = usp.get('pad');
-  if(padParam){
-    document.documentElement.style.setProperty('--outer-pad', padParam + 'px');
-  }
+  if(usp.get('bg') === 'transparent'){ document.body.style.background = 'transparent'; }
+  if(usp.get('pad')){ document.documentElement.style.setProperty('--outer-pad', usp.get('pad') + 'px'); }
+  if(usp.get('newtab') === '1') openInNewTabEl.checked = true;
+  if(usp.get('newtab') === '0') openInNewTabEl.checked = false;
 
-  let pdfFiles = []; // [{file: File, id: number}]
-  let uid = 0;
+  const toast = document.createElement('div');
+  toast.setAttribute('role','status');
+  toast.style.position='fixed'; toast.style.left='50%'; toast.style.bottom='16px'; toast.style.transform='translateX(-50%)';
+  toast.style.padding='10px 14px'; toast.style.borderRadius='12px'; toast.style.background='rgba(0,0,0,.8)'; toast.style.color='#fff'; toast.style.fontSize='0.95rem'; toast.style.boxShadow='0 6px 12px rgba(0,0,0,.2)';
+  toast.style.display='none'; toast.style.zIndex='3';
+  document.body.appendChild(toast);
+  function showToast(msg, ms=3000){ toast.textContent = msg; toast.style.display='block'; clearTimeout(showToast._t); showToast._t = setTimeout(()=> toast.style.display='none', ms); }
 
-  function sanitizeName(name){
-    return name.replace(/[\/:*?"<>|]/g, '').trim();
-  }
-
-  function outputFilename(){
-    const year = new Date().getFullYear();
-    const n = sanitizeName(studentNameEl.value || 'Student Name');
-    return `Transition Assessments - ${n} - ${year}.pdf`;
-  }
-
-  function renderList(){
-    filesList.innerHTML = '';
-    previewName.textContent = outputFilename();
-    if(pdfFiles.length === 0){
-      filesList.innerHTML = '<div class="subtle">No files added yet.</div>';
-      return;
+  function saveBlobSmart(blob, name){
+    if(openInNewTabEl.checked){
+      try{
+        const url = URL.createObjectURL(blob);
+        const w = window.open(url, '_blank');
+        if(!w){ showToast('Popup blocked. Allow popups to view the merged PDF.'); }
+        setTimeout(()=> URL.revokeObjectURL(url), 4000);
+        return true;
+      }catch(e){}
     }
-    pdfFiles.forEach((item, idx) => {
-      const f = item.file;
-      const row = document.createElement('div');
-      row.className = 'file';
-      row.setAttribute('data-id', item.id);
-      row.innerHTML = `
-        <strong>${idx+1}.</strong>
+    try{
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.style.display='none';
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+      return true;
+    }catch(e){}
+    try{
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a'); link.href = url; link.download = name; link.textContent = 'Click here to download: ' + name;
+      link.style.display='inline-block'; link.style.marginTop='8px'; filesList.appendChild(link);
+      showToast('Click the link that appeared to save the PDF.');
+      return false;
+    }catch(e){ return false; }
+  }
+
+  let pdfFiles = []; let uid = 0;
+  function sanitizeName(name){ return name.replace(/[\/:*?"<>|]/g, '').trim(); }
+  function outputFilename(){ const year=new Date().getFullYear(); const n=sanitizeName(studentNameEl.value||'Student Name'); return `Transition Assessments - ${n} - ${year}.pdf`; }
+  function renderList(){
+    filesList.innerHTML = ''; previewName.textContent = outputFilename();
+    if(pdfFiles.length===0){ filesList.innerHTML='<div class="subtle">No files added yet.</div>'; return; }
+    pdfFiles.forEach((item, idx)=>{
+      const f=item.file; const row=document.createElement('div'); row.className='file'; row.setAttribute('data-id', item.id);
+      row.innerHTML=`<strong>${idx+1}.</strong>
         <span style="flex:1 1 auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${f.name}">${f.name}</span>
         <small>${(f.size/1024/1024).toFixed(2)} MB</small>
         <div class="row">
           <button class="iconbtn" data-action="up" title="Move up">▲</button>
           <button class="iconbtn" data-action="down" title="Move down">▼</button>
           <button class="iconbtn" data-action="remove" title="Remove">✕</button>
-        </div>
-      `;
+        </div>`;
       filesList.appendChild(row);
     });
   }
+  function addFiles(fs){ const newOnes=[...fs].filter(f=>f.type==='application/pdf'||f.name.toLowerCase().endsWith('.pdf')); pdfFiles=pdfFiles.concat(newOnes.map(file=>({file,id:uid++}))); renderList(); }
 
-  function addFiles(fs){
-    const newOnes = [...fs].filter(f => (f.type === 'application/pdf') || f.name.toLowerCase().endsWith('.pdf'));
-    pdfFiles = pdfFiles.concat(newOnes.map(file => ({file, id: uid++})));
-    renderList();
-  }
+  fileInput.addEventListener('change', e=>addFiles(e.target.files));
+  ;['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault(); e.stopPropagation(); drop.classList.add('drag');}));
+  ;['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault(); e.stopPropagation(); drop.classList.remove('drag');}));
+  drop.addEventListener('drop', e=>{const dt=e.dataTransfer; if(dt&&dt.files) addFiles(dt.files);});
 
-  fileInput.addEventListener('change', e => addFiles(e.target.files));
-
-  // Drag & Drop UX
-  ;['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); drop.classList.add('drag'); }));
-  ;['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); drop.classList.remove('drag'); }));
-  drop.addEventListener('drop', e => { const dt = e.dataTransfer; if(dt && dt.files) addFiles(dt.files); });
-
-  // Reorder & remove via event delegation
-  filesList.addEventListener('click', (e) => {
-    const btn = e.target.closest('button');
-    if(!btn) return;
-    const row = e.target.closest('.file');
-    const id = Number(row.getAttribute('data-id'));
-    const idx = pdfFiles.findIndex(x => x.id === id);
-    if(idx === -1) return;
-    const action = btn.getAttribute('data-action');
-    if(action === 'remove'){
-      pdfFiles.splice(idx,1);
-    } else if(action === 'up' && idx > 0){
-      const [it] = pdfFiles.splice(idx,1);
-      pdfFiles.splice(idx-1,0,it);
-    } else if(action === 'down' && idx < pdfFiles.length-1){
-      const [it] = pdfFiles.splice(idx,1);
-      pdfFiles.splice(idx+1,0,it);
-    }
-    renderList();
+  filesList.addEventListener('click',(e)=>{
+    const btn=e.target.closest('button'); if(!btn) return; const row=e.target.closest('.file'); const id=Number(row.getAttribute('data-id'));
+    const idx=pdfFiles.findIndex(x=>x.id===id); if(idx===-1) return;
+    const action=btn.getAttribute('data-action');
+    if(action==='remove'){ pdfFiles.splice(idx,1);} else if(action==='up'&&idx>0){const[it]=pdfFiles.splice(idx,1); pdfFiles.splice(idx-1,0,it);} else if(action==='down'&&idx<pdfFiles.length-1){const[it]=pdfFiles.splice(idx,1); pdfFiles.splice(idx+1,0,it);} renderList();
   });
 
-  clearBtn.addEventListener('click', () => { pdfFiles = []; renderList(); });
-  studentNameEl.addEventListener('input', () => { previewName.textContent = outputFilename(); });
-
-  function saveBlobSmart(blob, name){
-    // 1) Try the standard anchor download
-    try{
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = name;
-      a.style.display = 'none';
-      // In some sandboxes, direct download is blocked but opening a new tab works
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(()=>{
-        URL.revokeObjectURL(a.href);
-        a.remove();
-      }, 2000);
-      return true;
-    }catch(e){ /* continue */ }
-
-    // 2) Safari/iframe fallback: open in a new tab
-    try{
-      const url = URL.createObjectURL(blob);
-      const w = window.open(url, '_blank');
-      if(w){
-        setTimeout(()=> URL.revokeObjectURL(url), 4000);
-        return true;
-      }
-    }catch(e){ /* continue */ }
-
-    // 3) Last resort: render a visible link for manual click
-    try{
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url; link.download = name; link.textContent = 'Click here to download: ' + name;
-      link.style.display='inline-block'; link.style.marginTop='8px';
-      filesList.appendChild(link);
-      showToast('Popup blocked. Click the link that appeared to save the PDF.');
-      return false;
-    }catch(e){
-      return false;
-    }
-  }
+  clearBtn.addEventListener('click',()=>{ pdfFiles=[]; renderList();});
+  studentNameEl.addEventListener('input',()=>{ previewName.textContent=outputFilename();});
 
   async function mergePDFs(){
-    if(pdfFiles.length === 0){ alert('Add at least one PDF.'); return; }
-    const name = outputFilename();
-    if(!studentNameEl.value.trim()){
-      const ok = confirm('No student name entered. Continue with "(Student Name)" placeholder?');
-      if(!ok) return;
-    }
-
-    mergeBtn.disabled = true; mergeBtn.textContent = 'Merging…';
+    if(pdfFiles.length===0){ alert('Add at least one PDF.'); return; }
+    const name=outputFilename();
+    if(!studentNameEl.value.trim()){ const ok=confirm('No student name entered. Continue with "(Student Name)" placeholder?'); if(!ok) return; }
+    mergeBtn.disabled=true; mergeBtn.textContent='Merging…';
     try{
-      const { PDFDocument } = PDFLib;
-      const outDoc = await PDFDocument.create();
-
-      for(const item of pdfFiles){
-        const f = item.file;
-        const bytes = new Uint8Array(await f.arrayBuffer());
-        const src = await PDFDocument.load(bytes, { ignoreEncryption: true });
-        const pages = await outDoc.copyPages(src, src.getPageIndices());
-        pages.forEach(p => outDoc.addPage(p));
-      }
-
-      const outBytes = await outDoc.save({ updateFieldAppearances: true });
-      const blob = new Blob([outBytes], {type:'application/pdf'});
-
-      const ok = saveBlobSmart(blob, name);
-      if(!ok){
-        showToast('Download fallback used.');
-      }
-    }catch(err){
-      console.error(err);
-      alert('Sorry—something went wrong merging those PDFs.');
-    }finally{
-      mergeBtn.disabled = false; mergeBtn.textContent = 'Merge PDFs';
-    }
+      const { PDFDocument }=PDFLib; const outDoc=await PDFDocument.create();
+      for(const item of pdfFiles){ const f=item.file; const bytes=new Uint8Array(await f.arrayBuffer()); const src=await PDFDocument.load(bytes,{ignoreEncryption:true}); const pages=await outDoc.copyPages(src,src.getPageIndices()); pages.forEach(p=>outDoc.addPage(p)); }
+      const outBytes=await outDoc.save({updateFieldAppearances:true}); const blob=new Blob([outBytes],{type:'application/pdf'});
+      const ok=saveBlobSmart(blob,name); if(!ok){ showToast('Download fallback used.'); }
+    }catch(err){ console.error(err); alert('Sorry—something went wrong merging those PDFs.'); }
+    finally{ mergeBtn.disabled=false; mergeBtn.textContent='Merge PDFs'; }
   }
-
-  mergeBtn.addEventListener('click', mergePDFs);
-  renderList();
+  mergeBtn.addEventListener('click',mergePDFs);
 </script>
 </body>
 </html>
+
