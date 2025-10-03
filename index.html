@@ -8,7 +8,7 @@
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 <style>
   :root{
-    --slate:#4A7A92; --teal:#5A94B1; --green:#879B8D; --purple:#756A85; --lilac:#8E869F;
+    --slate:#4A7A92; --teal:#5A94B1; --green:#879B8D; --purple:#756A85;
     --soft:#D3DDD7; --pale:#C4BFD0;
     --outer-pad: 24px;
     --card-pad: 28px;
@@ -27,7 +27,7 @@
     padding:var(--outer-pad);
     overflow:auto;
   }
-  .wrap{position:relative; z-index:1; width:100%; max-width:760px}
+  .wrap{position:relative; z-index:1; width:100%; max-width:600px; margin:0 auto;}
   .card{
     width:100%; background:#fff; border:1px solid var(--soft);
     border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.05);
@@ -152,12 +152,12 @@
     pdfFiles.forEach((item, idx)=>{
       const f=item.file; const row=document.createElement('div'); row.className='file'; row.setAttribute('data-id', item.id);
       row.innerHTML=`<strong>${idx+1}.</strong>
-        <span style="flex:1 1 auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${f.name}">${f.name}</span>
+        <span style=\"flex:1 1 auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;\" title=\"${f.name}\">${f.name}</span>
         <small>${(f.size/1024/1024).toFixed(2)} MB</small>
-        <div class="row">
-          <button class="iconbtn" data-action="up" title="Move up">▲</button>
-          <button class="iconbtn" data-action="down" title="Move down">▼</button>
-          <button class="iconbtn" data-action="remove" title="Remove">✕</button>
+        <div class=\"row\">
+          <button class=\"iconbtn\" data-action=\"up\" title=\"Move up\">▲</button>
+          <button class=\"iconbtn\" data-action=\"down\" title=\"Move down\">▼</button>
+          <button class=\"iconbtn\" data-action=\"remove\" title=\"Remove\">✕</button>
         </div>`;
       filesList.appendChild(row);
     });
@@ -182,7 +182,7 @@
   async function mergePDFs(){
     if(pdfFiles.length===0){ alert('Add at least one PDF.'); return; }
     const name=outputFilename();
-    if(!studentNameEl.value.trim()){ const ok=confirm('No student name entered. Continue with "(Student Name)" placeholder?'); if(!ok) return; }
+    if(!studentNameEl.value.trim()){ const ok=confirm('No student name entered. Continue with \"(Student Name)\" placeholder?'); if(!ok) return; }
     mergeBtn.disabled=true; mergeBtn.textContent='Merging…';
     try{
       const { PDFDocument }=PDFLib; const outDoc=await PDFDocument.create();
@@ -196,4 +196,3 @@
 </script>
 </body>
 </html>
-
